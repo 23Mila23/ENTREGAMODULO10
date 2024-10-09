@@ -68,12 +68,13 @@ position: relative;
     }
 .contenedor-personaje {
     display: grid;
-    grid-template-columns: 5% repeat(4, 1fr);
+    grid-template-columns: 5% repeat(5, 1fr);
     grid-gap: 10px;
     align-items: center;
     justify-content: space-between;
     border: 1px solid #dee2e6;
     padding: 10px;
+    text-align: center;
     }
     .contenedor-personaje img {
     max-width: 60px;
@@ -96,15 +97,16 @@ position: relative;
     }
 
     @media screen and (max-width: 1200px) {
-        contenedor-personaje {
+        .contenedor-personaje {
             grid-template-columns: auto;
             justify-content: center;
             padding: 20px;
             }
-            contenedor-personaje img {
+            .contenedor-personaje img {
             max-width: 300px;
+            justify-self: center;
             }
-            contenedor-personaje p {
+            .contenedor-personaje p {
             text-align: center;
             }
     }
