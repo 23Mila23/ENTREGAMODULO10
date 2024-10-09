@@ -12,10 +12,10 @@ try {
 }
 }
 
-export const getPersonaje = async (nombre : string) : Promise<Personaje> => {
+export const getPersonaje = async (nombre : string) : Promise<Personaje[]> => {
     try {
         const {data} = await axios.get(`http://localhost:3000/personajes?nombre_like=${nombre}`);
-        return data[0];
+        return data;
     } catch (error) {
         throw new Error ("No se ha podido descargar el personaje")
     }

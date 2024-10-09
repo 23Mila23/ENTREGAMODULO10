@@ -45,8 +45,7 @@ const crearContenedorPersonaje = (personaje: Personaje): HTMLDivElement => {
   return contenedorPersonaje;
 };
 
-const pintarPersonajes = async () => {
-  const listadoPersonajes = await getListadoPersonajes();
+const pintarPersonajes = async (listadoPersonajes: Personaje[]) => {
   const divListadoPersonajes = document.querySelector("#listado-personajes");
   if (divListadoPersonajes && divListadoPersonajes instanceof HTMLDivElement) {
     listadoPersonajes.forEach((personaje) => {
@@ -58,33 +57,42 @@ const pintarPersonajes = async () => {
   }
 };
 
-const pintarPersonajeFiltrado = (personaje: Personaje) => {
-    if(!personaje){
-        alert("Personaje no encontrado");
-        return;
-    }
+const filtrarPersonajes = async (evento: Event) => {
+  evento.preventDefault();
+  const personaje = await buscarPersonaje();
+  if (!personaje) {
+    alert("Personaje no encontrado");
+    return;
+  }
+
+  reiniciarLista();
+
+  pintarPersonajes(personaje);
+};
+
+const buscarPersonaje = async (): Promise<Personaje[]> => {
+  const inputNombre = document.querySelector(
+    "#buscarNombre"
+  ) as HTMLInputElement;
+
+  const search = inputNombre.value;
+  const personaje = await getPersonaje(search);
+
+  return personaje;
+};
+
+const reiniciarLista = () => {
   let divListadoPersonajes = document.querySelector("#listado-personajes");
   if (divListadoPersonajes && divListadoPersonajes instanceof HTMLDivElement) {
     divListadoPersonajes.innerHTML = "";
   } else {
     throw new Error("No se ha podido reiniciar el listado");
   }
-  const contenedorPersonaje = crearContenedorPersonaje(personaje);
-  divListadoPersonajes.appendChild(contenedorPersonaje);
 };
 
-const buscarPersonaje = async (evento: Event) => {
-  evento.preventDefault();
-  const inputNombre = document.querySelector("#buscarNombre");
-  if (inputNombre && inputNombre instanceof HTMLInputElement) {
-    const search = inputNombre.value;
-    const personaje = await getPersonaje(search);
-    pintarPersonajeFiltrado(personaje);
-  }
-};
-
-document.addEventListener("DOMContentLoaded", () => {
-  pintarPersonajes();
+document.addEventListener("DOMContentLoaded", async () => {
+  const listadoPersonajes = await getListadoPersonajes();
+  pintarPersonajes(listadoPersonajes);
   const formulario = document.querySelector("#formulario");
-  formulario?.addEventListener("submit", buscarPersonaje);
+  formulario?.addEventListener("submit", filtrarPersonajes);
 });
